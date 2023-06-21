@@ -3,25 +3,35 @@ import { Resturant } from "../../../entities/resturant";
 
 
 const resturantSchema = new Schema<Resturant>({
-    name: { type: String ,required:true },
+    name: { type: String},
     rating: {type: Number},
     views: {type: Number},
-    description: {type: String},
-    address: {type: String, required:true},
-    timings:{type: []},
-    phoneNo:{type:Number},
+    address: {type: String},
+    phoneNo:{type:String},
     location: {
         type: {
           type: String,
           enum: ['Point'], // Only allow 'Point' as the type
-          required: true,
         },
         coordinates: {
-          type: [Number],
-          required: true,
+          type: [Number]
         },
       },
-    radius:{type:Number},
+      status:{type:String},
+      timing:{type:[String]},
+     /* photos:[{ 
+        type: { 
+          html_attributions: { type: [String] },
+          height: { type: Number },
+          photo_reference: { type: String },
+        }
+      }]*/
+      photos:{type:[String]},
+      limitReached:{type:Boolean},
+      maxOrdersPerMonth:{type:Number},
+      featured:{type:Boolean},
+      plan:{type:Number}
+    
     });
     
     export const ResturantModel = model<Resturant>('Resturant', resturantSchema);

@@ -1,5 +1,7 @@
 export interface IResturantRequest{
   longitude:number;
   latitude:number;
-  radius:number;
+  maxOrdersPerMonth:number;
+  featured:boolean;
+  plan:number;
 }

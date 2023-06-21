@@ -1,16 +1,22 @@
   export interface IResturant {
+
     name: string;
     rating: number;
     views: number;
-    description: string;
-    address: string;
-    timings: string[];
-    phoneNo: number;
+    address: string; 
+    phoneNo: string;
     location: {
       type: string;
       coordinates: number[];
     };
-    radius: number;
+    status:string;
+    timing:string[];
+    photos:string[];
+    limitReached:boolean;
+    maxOrdersPerMonth:number;
+    featured:boolean;
+    plan:number;
+
   }
   
   
