@@ -7,6 +7,8 @@ import AWS from 'aws-sdk';
 import axios from 'axios';
 import { Resturant } from "../entities/resturant";
 import { ResturantModel } from "../database/mongodb/schema/resturant";
+import { OrderModel } from "../database/mongodb/schema/order";
+//import { OrderModel } from "../database/mongodb/schema/order";
 
 
 
@@ -113,7 +115,109 @@ async updateResturant(id: string, updates: Partial<Resturant>): Promise<any> {
     return this.responseBuilder.errorResponse(error);
   }
 }
+
+/*public async searchRestaurants(filters: { limitReached?: boolean, featured?: boolean, start?: number, end?: number }): Promise<any> {
+  try {
+    let query = ResturantModel.find({});
+
+    if (filters.limitReached !== undefined) {
+      query = query.where('limitReached').equals(filters.limitReached);
+    }
+
+    if (filters.featured !== undefined) {
+      query = query.where('featured').equals(filters.featured);
+    }
+
+    if (filters.start !== undefined && filters.end !== undefined) {
+      query = query.skip(filters.start).limit(filters.end - filters.start + 1);
+    }
+
+    const records = await query.exec();
+    return records;
+  } catch (error) {
+    throw new Error('Internal server error');
+  } 
+}*/
+async searchRestaurants(filters: { limitReached?: boolean, featured?: boolean, start?: number, end?: number, maxOrders?: boolean }): Promise<any> {
+  try {
+    if (filters.maxOrders) {
+      const restaurantsWithOrders = await OrderModel.aggregate([
+        { $group: { _id: "$resturantId", orderCount: { $sum: 1 } } },
+        { $sort: { orderCount: -1 } }
+      ]);
+console.log(restaurantsWithOrders);
+      const maxOrderCount = restaurantsWithOrders.length > 0 ? restaurantsWithOrders[0].orderCount : 0;
+      console.log(maxOrderCount);
+      const restaurantIdsWithMaxOrders = restaurantsWithOrders
+        .filter((restaurant: any) => restaurant.orderCount === maxOrderCount)
+        .map((restaurant: any) => restaurant._id);
+console.log(restaurantIdsWithMaxOrders);
+      const records = await ResturantModel.find({
+       // ...filters,
+        _id: { $in: restaurantIdsWithMaxOrders }
+      });
+console.log(records);
+      return records;
+    } else {
+      let query = ResturantModel.find({});
+
+    if (filters.limitReached !== undefined) {
+      query = query.where('limitReached').equals(filters.limitReached);
+    }
+
+    if (filters.featured !== undefined) {
+      query = query.where('featured').equals(filters.featured);
+    }
+
+    if (filters.start !== undefined && filters.end !== undefined) {
+      query = query.skip(filters.start).limit(filters.end - filters.start + 1);
+    }
+
+    const records = await query.exec();
+    return records;
+    }
+  } catch (error) {
+    throw new Error('Internal server error');
   }
+}
+
+/*async searchResturants(filters: { limitReached?: boolean, featured?: boolean }): Promise<any> {
+  try {
+    const restaurantsWithOrders = await OrderModel.aggregate([
+      { $group: { _id: "$resturantId", orderCount: { $sum: 1 } } },
+      { $sort: { orderCount: -1 } }
+    ]);
+
+    const restaurantIdsWithMaxOrders = restaurantsWithOrders.map((restaurant: any) => restaurant._id);
+
+    const records = await ResturantModel.find({
+      ...filters,
+      _id: { $in: restaurantIdsWithMaxOrders }
+    });
+
+    return records;
+  } catch (error) {
+    throw new Error('Internal server error');
+  } 
+}*/
+
+
+
+ 
+
+
+
+
+/*async countOrdersByRestaurantId(restaurantId: string): Promise<number> {
+  try {
+    const orderCount = await OrderModel.countDocuments({ restaurantId });
+    return orderCount;
+  } catch (error) {
+    throw new Error('Internal server error');
+  }
+}*/
+
+}
   
 
 

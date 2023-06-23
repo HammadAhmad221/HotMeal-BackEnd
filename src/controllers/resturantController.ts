@@ -53,6 +53,12 @@ return this.resturentService?.getAddressFromCoordinates(request);
     return this.resturentService?.updateResturant(id, updates);
   }
   
+  @Post("/search")
+  public async searchResturants(
+    @Body() filters: { limitReached?: boolean, featured?: boolean, start?: number, end?: number ,maxOrders?:boolean}
+  ): Promise<any> {
+    return this.resturentService?.searchRestaurants(filters);
+  }
 
 }
 

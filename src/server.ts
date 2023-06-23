@@ -3,14 +3,13 @@ import {Container} from 'typescript-ioc';
 import { DatabaseService } from "./common/services/database.service";
 
 
-
 const port = process.env.PORT || 3000;
 
 const databaseService:DatabaseService=Container.get(DatabaseService);
 
 databaseService.connectToDB();
 
-const { MongoClient } = require('mongodb');
+/*const { MongoClient } = require('mongodb');
 
 async function createGeospatialIndex() {
   const uri = 'mongodb://0.0.0.0:27017'; // Update with your MongoDB connection string
@@ -32,7 +31,7 @@ async function createGeospatialIndex() {
   }
 }
 
-createGeospatialIndex();
+createGeospatialIndex();*/
 
 
 

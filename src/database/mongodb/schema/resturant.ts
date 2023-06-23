@@ -19,13 +19,6 @@ const resturantSchema = new Schema<Resturant>({
       },
       status:{type:String},
       timing:{type:[String]},
-     /* photos:[{ 
-        type: { 
-          html_attributions: { type: [String] },
-          height: { type: Number },
-          photo_reference: { type: String },
-        }
-      }]*/
       photos:{type:[String]},
       limitReached:{type:Boolean},
       maxOrdersPerMonth:{type:Number},
