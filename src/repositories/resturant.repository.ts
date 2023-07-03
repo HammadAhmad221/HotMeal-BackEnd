@@ -10,7 +10,7 @@ export class ResturantRepository {
   //////Add a resturant in db
   constructor(@Inject private databaseService: DatabaseService) {}
 
-  addResturant(latitude: number, longitude: number): Promise<any> {
+  /*addResturant(latitude: number, longitude: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let resturantModel = {
         name: "Lounge 37",
@@ -46,7 +46,7 @@ export class ResturantRepository {
         }
       }
     });
-  }
+  }*/
 
   ////////finding nearby resturants from db on the basis of lat and lng
   async getNearbyResturantsfromDB(request: IResturantRequest) {

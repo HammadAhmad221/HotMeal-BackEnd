@@ -3,6 +3,7 @@ import { Body, Controller, Path, Post,   Route, UploadedFile} from "tsoa";
 import { Inject } from "typescript-ioc";
 import { IResturantRequest } from "../models/requests/resturant.request";
 import { Resturant } from "../entities/resturant";
+import { IGetAddressRequest } from "../models/requests/getAddress.request";
 
 
 
@@ -11,10 +12,10 @@ export class RestorentController extends Controller {
   @Inject
   private resturentService?: ResturantService;
 
-  @Post("/addresturant")
+  /*@Post("/addresturant")
   public async addResturant(@Body() request: IResturantRequest): Promise<any> {
     return this.resturentService?.addResturant(request);
-  }
+  }*/
 
   @Post("/getnearbyresturants")
   public async getPlacesWithinRadius(
@@ -31,18 +32,8 @@ export class RestorentController extends Controller {
     }
     return await this.resturentService?.uploadImageToS3(file);
   }
-  /*@Post('/uploadImage')
-  public async uploadImageFromLink(
-    @Query() imgLink: string
-  ): Promise<any> {
-    if (!imgLink) {
-      throw new Error('No image link provided');
-    }
-  
-    return await this.resturentService?.uploadImageWithLinkToS3(imgLink);
-  }*/
   @Post('/address')
-  public async getAdress(@Body() request:IResturantRequest):Promise<any>{
+  public async getAdress(@Body() request:IGetAddressRequest):Promise<any>{
 return this.resturentService?.getAddressFromCoordinates(request);
   }
   @Post("/{id}/update")
