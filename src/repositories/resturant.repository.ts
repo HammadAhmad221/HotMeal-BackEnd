@@ -3,6 +3,8 @@ import { Inject } from "typescript-ioc";
 import { IResturantRequest } from "../models/requests/resturant.request";
 import axios from "axios";
 import AWS from "aws-sdk";
+import path from "path";
+ // Update the path if necessary
 
 const { MongoClient } = require("mongodb");
 
@@ -10,7 +12,7 @@ export class ResturantRepository {
   //////Add a resturant in db
   constructor(@Inject private databaseService: DatabaseService) {}
 
-  /*addResturant(latitude: number, longitude: number): Promise<any> {
+  addResturant(latitude: number, longitude: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let resturantModel = {
         name: "Lounge 37",
@@ -46,16 +48,23 @@ export class ResturantRepository {
         }
       }
     });
-  }*/
+  }
 
-  ////////finding nearby resturants from db on the basis of lat and lng
+  ////////finding nearby resturants from db on the basis of lat and lng old and working version
+  //"mongodb://127.0.0.1:27017"
   async getNearbyResturantsfromDB(request: IResturantRequest) {
-    const uri = "mongodb://0.0.0.0:27017"; // Update with your MongoDB connection string
-    const client = new MongoClient(uri);
+    //const uri = process.env.MONGODB_URI_STAGE; // Update with your MongoDB connection string
+    //const client = new MongoClient(uri);
+
+    const uri = process.env.NODE_ENV=='production'?process.env.MONGODB_URI_PROD:process.env.MONGODB_URI_STAGE;
+  const certificate = path.resolve("security/rds-combined-ca-bundle.pem");
+  const client = new MongoClient(uri, {
+    sslCA: certificate
+  });
 
     try {
       await client.connect();
-      const db = client.db("CheckingResturants"); // Replace with your database name
+      const db = client.db("hotmeal"); // Replace with your database name
       const collection = db.collection("resturants"); // Replace with your collection name
 
       // Perform the geospatial query
@@ -79,44 +88,6 @@ export class ResturantRepository {
       await client.close();
     }
   }
-  ///////////////////////////////////get images names after uploading them
-  /*async uploadImagesWithLinksToS3(imageLinks) {
-    // Configure AWS SDK with your credentials and region
-    AWS.config.update({
-      accessKeyId: process.env.S3accessKeyId,
-      secretAccessKey: process.env.S3secretAccessKey,
-      region: 'us-west-2'
-    });
-  
-    const s3 = new AWS.S3();
-    const uploadKeys:string[] = []; // Array to store the uploaded file keys
-  
-    try {
-      for (const imageLink of imageLinks) {
-        // Fetch the image from the provided link
-        const response = await axios.get(imageLink, { responseType: 'arraybuffer' });
-        const imageBuffer = Buffer.from(response.data, 'binary');
-  
-        // Generate a timestamp
-        const timestamp = Date.now();
-  
-        const uploadParams = {
-          Bucket: 'hotmeal',
-          Key: `image_${timestamp}.jpg`, // Set the desired key or use the original filename from the link
-          Body: imageBuffer,
-          ACL: 'private'
-        };
-  
-        await s3.upload(uploadParams).promise();
-        uploadKeys.push(uploadParams.Key); // Store the uploaded file key
-      }
-  
-      return uploadKeys; // Return the array of uploaded file keys
-    } catch (error) {
-      console.error("Error occurred while uploading images to S3:", error);
-      return [];
-    }
-  }*/
   
   
   /////////////upload imagewithlinktoS3
@@ -214,12 +185,13 @@ export class ResturantRepository {
 
         const uploadedKeys =await Promise.all(uploadPromises);
         mappedData.photos = uploadedKeys;
-        console.log(mappedData);
+        //console.log(mappedData);
        this.databaseService.createResturant(mappedData);
         } catch (error) {
           console.error("Error occurred while saving a restaurant:", error);
         }
       }
+      //console.log(restaurantInfo);
       return restaurantInfo;
     } catch (error) {
       console.error("Error occurred while fetching nearby restaurants:", error);
