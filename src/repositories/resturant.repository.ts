@@ -4,6 +4,7 @@ import { IResturantRequest } from "../models/requests/resturant.request";
 import axios from "axios";
 import AWS from "aws-sdk";
 import path from "path";
+
  // Update the path if necessary
 
 const { MongoClient } = require("mongodb");
@@ -56,7 +57,9 @@ export class ResturantRepository {
     //const uri = process.env.MONGODB_URI_STAGE; // Update with your MongoDB connection string
     //const client = new MongoClient(uri);
 
-    const uri = process.env.NODE_ENV=='production'?process.env.MONGODB_URI_PROD:process.env.MONGODB_URI_STAGE;
+   // const uri = process.env.NODE_ENV=='production'?process.env.MONGODB_URI_PROD:process.env.MONGODB_URI_STAGE;
+   const uri =process.env.NODE_ENV=='production'?process.env.MONGODB_URI_PROD:process.env.MONGODB_URI_STAGE;
+
   const certificate = path.resolve("security/rds-combined-ca-bundle.pem");
   const client = new MongoClient(uri, {
     sslCA: certificate
