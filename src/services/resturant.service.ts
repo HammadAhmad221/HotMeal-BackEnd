@@ -8,6 +8,7 @@ import axios from 'axios';
 import { Resturant } from "../entities/resturant";
 import { ResturantModel } from "../database/mongodb/schema/resturant";
 import { OrderModel } from "../database/mongodb/schema/order";
+import { IGetAddress } from "../models/requests/getaddress.request";
 //import { OrderModel } from "../database/mongodb/schema/order";
 
 
@@ -90,7 +91,7 @@ export class ResturantService {
 
 
 
-async getAddressFromCoordinates(coordinates:IResturantRequest): Promise<string> {
+async getAddressFromCoordinates(coordinates:IGetAddress): Promise<string> {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates.latitude},${coordinates.longitude}&key=${apiKey}`;
 

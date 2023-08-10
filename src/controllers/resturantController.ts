@@ -3,6 +3,7 @@ import { Body, Controller, Path, Post,   Route, UploadedFile} from "tsoa";
 import { Inject } from "typescript-ioc";
 import { IResturantRequest } from "../models/requests/resturant.request";
 import { Resturant } from "../entities/resturant";
+import { IGetAddress } from "../models/requests/getaddress.request";
 
 
 
@@ -42,7 +43,7 @@ export class RestorentController extends Controller {
     return await this.resturentService?.uploadImageWithLinkToS3(imgLink);
   }*/
   @Post('/address')
-  public async getAdress(@Body() request:IResturantRequest):Promise<any>{
+  public async getAdress(@Body() request:IGetAddress):Promise<any>{
 return this.resturentService?.getAddressFromCoordinates(request);
   }
   @Post("/{id}/update")
