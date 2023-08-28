@@ -123,9 +123,9 @@ async updateResturant(id: string, updates: Partial<Resturant>): Promise<any> {
 
 
 
-async getAllRestaurants(page: number, pageSize: number): Promise<any> {
+async getAllRestaurants(page: number): Promise<any> {
   try {
-    const allRestaurants =await this.resturantRepository.getAllResturants(page,pageSize);
+    const allRestaurants =await this.resturantRepository.getAllResturants(page);
     return this.responseBuilder.successResponse(allRestaurants);
   } catch (error) {
 return this.responseBuilder.errorResponse(error);

@@ -66,8 +66,9 @@ export class DatabaseService{
     //   }
     // }
 /////////////get all resturants from db with pagination///////////////////
-    async getAllRestaurantsFromDb(page: number, pageSize: number): Promise<any> {
+    async getAllRestaurantsFromDb(page: number): Promise<any> {
       try {
+        const pageSize=10;
         const skip = (page - 1) * pageSize;
         const allRestaurants = await ResturantModel.find()
           .skip(skip)
@@ -79,7 +80,8 @@ export class DatabaseService{
     }
 //////////////get all orders from db with pagination//////////////////////
 
-async getAllOrdersFromDb(page: number, pageSize: number): Promise<any> {
+async getAllOrdersFromDb(page: number): Promise<any> {
+  const pageSize=10;
   try {
     const skip = (page - 1) * pageSize;
     const allOrders = await OrderModel.find()

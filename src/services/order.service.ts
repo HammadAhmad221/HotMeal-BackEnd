@@ -19,9 +19,9 @@ export class OrderService {
       }
     }
 
-    async getAllOrders(page: number, pageSize: number): Promise<any> {
+    async getAllOrders(page: number): Promise<any> {
       try {
-        const allOrders =await this.orderRepository.getAllOrders(page,pageSize);
+        const allOrders =await this.orderRepository.getAllOrders(page);
         return this.responseBuilder.successResponse(allOrders);
       } catch (error) {
     return this.responseBuilder.errorResponse(error);

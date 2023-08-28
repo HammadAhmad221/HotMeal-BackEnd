@@ -64,9 +64,9 @@ export class RestorentController extends Controller {
   }
 
   @Get("/allResturants")
-  public async getAllRestaurants(@Query() page: number,@Query() pageSize: number): Promise<any> {
+  public async getAllRestaurants(@Query() page: number): Promise<any> {
     
-    return this.resturentService?.getAllRestaurants(page,pageSize);
+    return this.resturentService?.getAllRestaurants(page);
   }
   @Get("/stats")
   public async getRestaurantStatistics(): Promise<any> {

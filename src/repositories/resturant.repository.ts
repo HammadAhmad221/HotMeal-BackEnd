@@ -222,9 +222,9 @@ export class ResturantRepository {
       return [];
     }
   }
- async getAllResturants(page: number, pageSize: number):Promise<any>{
+ async getAllResturants(page: number):Promise<any>{
   try{  
- const allResturants=await this.databaseService.getAllRestaurantsFromDb(page,pageSize);
+ const allResturants=await this.databaseService.getAllRestaurantsFromDb(page);
  return allResturants;
   }catch (error){
     throw new error ('daat is not comming in resturant repository');

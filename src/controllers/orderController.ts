@@ -13,11 +13,11 @@ export class OrderController extends Controller {
   }
 
 
-  
+
   @Get("/allOrders")
-  public async getAllOrders(@Query() page: number,@Query() pageSize: number): Promise<any> {
+  public async getAllOrders(@Query() page: number): Promise<any> {
     
-    return this.orderService?.getAllOrders(page,pageSize);
+    return this.orderService?.getAllOrders(page);
   }
 
 }
