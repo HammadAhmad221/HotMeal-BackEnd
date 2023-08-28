@@ -23,4 +23,14 @@ export class OrderRepository {
       }
     });
   }
+
+  async getAllOrders(page: number, pageSize: number):Promise<any>{
+    try{  
+   const allOrders=await this.databaseService.getAllOrdersFromDb(page,pageSize);
+   return allOrders;
+    }catch (error){
+      throw new error ('data is not comming in order repository');
+    }
+   }
+
 }

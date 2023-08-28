@@ -166,7 +166,7 @@ export class ResturantRepository {
            photos: restaurantData.photos ? restaurantData.photos.map((photo) => photo.photo_reference) : [],
             featured:request.featured,
             plan:request.plan,
-            limitReached:false,
+            limitReached:true,
             maxOrdersPerMonth:request.maxOrdersPerMonth
             
           };
@@ -221,4 +221,46 @@ export class ResturantRepository {
       return [];
     }
   }
+ async getAllResturants(page: number, pageSize: number):Promise<any>{
+  try{  
+ const allResturants=await this.databaseService.getAllRestaurantsFromDb(page,pageSize);
+ return allResturants;
+  }catch (error){
+    throw new error ('daat is not comming in resturant repository');
+  }
+ }
+//////////////////////////////get statics of resturants///////////////////////////
+
+  async getRestaurantStatistics(): Promise<{
+    totalRestaurantCount: number;
+    totalOrderCount: number;
+    todaysOrderCount: number;
+    restaurantsReachedOrdersLimit: number;
+    restaurantWithHighestOrders: number;
+    areaWithMostOrders: string | null;
+  }> {
+    try {
+      const totalRestaurantCount = await this.databaseService.getTotalRestaurantCount();
+      const totalOrderCount = await this.databaseService.countTotalOrders();
+      const todaysOrderCount = await this.databaseService.getTodaysOrderCount();
+      const restaurantsReachedOrdersLimit = await this.databaseService.getRestaurantsReachedOrdersLimit();
+      const restaurantWithHighestOrders = await this.databaseService.getRestaurantWithHighestOrders();
+      const areaWithMostOrders = await this.databaseService.getAreaWithMostOrders();
+
+      return {
+        totalRestaurantCount,
+        totalOrderCount,
+        todaysOrderCount,
+        restaurantsReachedOrdersLimit,
+        restaurantWithHighestOrders,
+        areaWithMostOrders,
+      };
+    } catch (error) {
+      throw new Error('Internal server error');
+    }
+  }
+
+
+
+  
 }

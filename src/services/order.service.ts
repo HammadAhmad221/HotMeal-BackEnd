@@ -18,4 +18,13 @@ export class OrderService {
         return this.responseBuilder.errorResponse(error);
       }
     }
+
+    async getAllOrders(page: number, pageSize: number): Promise<any> {
+      try {
+        const allOrders =await this.orderRepository.getAllOrders(page,pageSize);
+        return this.responseBuilder.successResponse(allOrders);
+      } catch (error) {
+    return this.responseBuilder.errorResponse(error);
+      }
+    }
 }

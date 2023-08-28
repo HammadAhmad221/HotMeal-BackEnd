@@ -1,5 +1,5 @@
 import { ResturantService } from "../services/resturant.service";
-import { Body, Controller, Path, Post,   Route, UploadedFile} from "tsoa";
+import { Body, Controller, Path, Post, Get,  Route, UploadedFile, Query} from "tsoa";
 import { Inject } from "typescript-ioc";
 import { IResturantRequest } from "../models/requests/resturant.request";
 import { Resturant } from "../entities/resturant";
@@ -61,6 +61,15 @@ return this.resturentService?.getAddressFromCoordinates(request);
     return this.resturentService?.searchRestaurants(filters);
   }
 
+  @Get("/allResturants")
+  public async getAllRestaurants(@Query() page: number,@Query() pageSize: number): Promise<any> {
+    
+    return this.resturentService?.getAllRestaurants(page,pageSize);
+  }
+  @Get("/stats")
+  public async getRestaurantStatistics(): Promise<any> {
+    return this.resturentService?.getRestaurantStatistics();
+  }
 }
 
 

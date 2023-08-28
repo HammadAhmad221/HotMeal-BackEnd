@@ -119,6 +119,19 @@ async updateResturant(id: string, updates: Partial<Resturant>): Promise<any> {
   }
 }
 
+
+
+
+
+async getAllRestaurants(page: number, pageSize: number): Promise<any> {
+  try {
+    const allRestaurants =await this.resturantRepository.getAllResturants(page,pageSize);
+    return this.responseBuilder.successResponse(allRestaurants);
+  } catch (error) {
+return this.responseBuilder.errorResponse(error);
+  }
+}
+
 /*public async searchRestaurants(filters: { limitReached?: boolean, featured?: boolean, start?: number, end?: number }): Promise<any> {
   try {
     let query = ResturantModel.find({});
@@ -205,12 +218,6 @@ console.log(records);
 }*/
 
 
-
- 
-
-
-
-
 /*async countOrdersByRestaurantId(restaurantId: string): Promise<number> {
   try {
     const orderCount = await OrderModel.countDocuments({ restaurantId });
@@ -219,6 +226,14 @@ console.log(records);
     throw new Error('Internal server error');
   }
 }*/
+async getRestaurantStatistics(): Promise<any> {
+  try {
+    const statistics = await this.resturantRepository.getRestaurantStatistics();
+    return this.responseBuilder.successResponse(statistics);
+  } catch (error) {
+    return this.responseBuilder.errorResponse(error);
+  }
+}
 
 }
   
