@@ -4,6 +4,7 @@ import { IResturantRequest } from "../models/requests/resturant.request";
 import axios from "axios";
 import AWS from "aws-sdk";
 import path from "path";
+import { IGetAddress } from "../models/requests/getaddress.request";
 
  // Update the path if necessary
 
@@ -229,6 +230,25 @@ export class ResturantRepository {
     throw new error ('daat is not comming in resturant repository');
   }
  }
+ ///////////////////////get address//////////////////////////////////////////////
+ async getAddressFromCoordinates(coordinates:IGetAddress): Promise<string> {
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+  const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates.latitude},${coordinates.longitude}&key=${apiKey}`;
+
+  try {
+    const response = await axios.get(apiUrl);
+    const results = response.data.results;
+
+    if (results.length > 0) {
+      const address = results[0].formatted_address;
+      return address;
+    } else {
+      throw new Error('No results found');
+    }
+  } catch (error) {
+return error;
+  }
+}
 //////////////////////////////get statics of resturants///////////////////////////
 
   async getRestaurantStatistics(): Promise<{
@@ -245,15 +265,27 @@ export class ResturantRepository {
       const todaysOrderCount = await this.databaseService.getTodaysOrderCount();
       const restaurantsReachedOrdersLimit = await this.databaseService.getRestaurantsReachedOrdersLimit();
       const restaurantWithHighestOrders = await this.databaseService.getRestaurantWithHighestOrders();
-      const areaWithMostOrders = await this.databaseService.getAreaWithMostOrders();
+     
+      const areaWithMostOrdersCoords = await this.databaseService.getAreaWithMostOrders();
+// console.log('coordinated',areaWithMostOrdersCoords);
+let areaWithMostOrdersAddress: string | null = null;
 
+
+if (areaWithMostOrdersCoords && areaWithMostOrdersCoords.length === 2) {
+  const latitude = areaWithMostOrdersCoords[1];
+  const longitude = areaWithMostOrdersCoords[0];
+
+  areaWithMostOrdersAddress = await this.getAddressFromCoordinates({ latitude, longitude });
+}
+// console.log(areaWithMostOrdersAddress);
       return {
         totalRestaurantCount,
         totalOrderCount,
         todaysOrderCount,
         restaurantsReachedOrdersLimit,
         restaurantWithHighestOrders,
-        areaWithMostOrders,
+        // areaWithMostOrders,
+        areaWithMostOrders: areaWithMostOrdersAddress,
       };
     } catch (error) {
       throw new Error('Internal server error');

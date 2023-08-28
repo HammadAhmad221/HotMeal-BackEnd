@@ -154,7 +154,7 @@ async getRestaurantWithHighestOrders(): Promise<number> {
   }
 }
 /////////////////Most Orders location area///////////////////
-  async getAreaWithMostOrders(): Promise<string | null> {
+  async getAreaWithMostOrders(): Promise<number[] | null> {
     try {
       const areasWithOrders = await OrderModel.aggregate([
         {
@@ -172,7 +172,8 @@ async getRestaurantWithHighestOrders(): Promise<number> {
 
       if (areasWithOrders.length > 0) {
         // console.log('Location of maximum orders',areasWithOrders[0]._id);
-        return areasWithOrders[0]._id;
+        return areasWithOrders[0]._id.coordinates;
+      
       } else {
         return null;
       }

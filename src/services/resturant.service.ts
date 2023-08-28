@@ -4,11 +4,11 @@ import { ResturantRepository } from "../repositories/resturant.repository";
 import { Inject } from "typescript-ioc";
 import { IResturantRequest } from "../models/requests/resturant.request";
 import AWS from 'aws-sdk';
-import axios from 'axios';
+// import axios from 'axios';
 import { Resturant } from "../entities/resturant";
 import { ResturantModel } from "../database/mongodb/schema/resturant";
 import { OrderModel } from "../database/mongodb/schema/order";
-import { IGetAddress } from "../models/requests/getaddress.request";
+// import { IGetAddress } from "../models/requests/getaddress.request";
 //import { OrderModel } from "../database/mongodb/schema/order";
 
 
@@ -91,24 +91,24 @@ export class ResturantService {
 
 
 
-async getAddressFromCoordinates(coordinates:IGetAddress): Promise<string> {
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-  const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates.latitude},${coordinates.longitude}&key=${apiKey}`;
+// async getAddressFromCoordinates(coordinates:IGetAddress): Promise<string> {
+//   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+//   const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates.latitude},${coordinates.longitude}&key=${apiKey}`;
 
-  try {
-    const response = await axios.get(apiUrl);
-    const results = response.data.results;
+//   try {
+//     const response = await axios.get(apiUrl);
+//     const results = response.data.results;
 
-    if (results.length > 0) {
-      const address = results[0].formatted_address;
-      return this.responseBuilder.successResponse(address);
-    } else {
-      throw new Error('No results found');
-    }
-  } catch (error) {
-return this.responseBuilder.errorResponse(error);
-  }
-}
+//     if (results.length > 0) {
+//       const address = results[0].formatted_address;
+//       return this.responseBuilder.successResponse(address);
+//     } else {
+//       throw new Error('No results found');
+//     }
+//   } catch (error) {
+// return this.responseBuilder.errorResponse(error);
+//   }
+// }
 
 async updateResturant(id: string, updates: Partial<Resturant>): Promise<any> {
   try {
@@ -226,14 +226,14 @@ console.log(records);
     throw new Error('Internal server error');
   }
 }*/
-async getRestaurantStatistics(): Promise<any> {
-  try {
-    const statistics = await this.resturantRepository.getRestaurantStatistics();
-    return this.responseBuilder.successResponse(statistics);
-  } catch (error) {
-    return this.responseBuilder.errorResponse(error);
+  async getRestaurantStatistics(): Promise<any> {
+    try {
+      const statistics = await this.resturantRepository.getRestaurantStatistics();
+      return this.responseBuilder.successResponse(statistics);
+    } catch (error) {
+      return this.responseBuilder.errorResponse(error);
+    }
   }
-}
 
 }
   
