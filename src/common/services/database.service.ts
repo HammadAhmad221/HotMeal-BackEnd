@@ -85,6 +85,7 @@ async getAllOrdersFromDb(page: number): Promise<any> {
   try {
     const skip = (page - 1) * pageSize;
     const allOrders = await OrderModel.find()
+      .populate('resturantId', 'name')
       .skip(skip)
       .limit(pageSize);
     return allOrders;
